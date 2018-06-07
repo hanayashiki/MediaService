@@ -163,3 +163,6 @@ $RECYCLE.BIN/
 # VisualStudioCode  
 .vscode  
 .vs/
+
+# Private files
+*.private

@@ -1,5 +1,5 @@
 ﻿{
-  "Domain": "",
-  "SAS_Signature": "",
-  "MaxSegmentSize": 4194304
+  "StorageConnectionStringFile": "C:\\Users\\t-chwang\\source\\repos\\ImageServingPlatform\\Core\\storageconnectionstring.private",
+  "MaxSegmentSize": 4194304,
+  "ContainerName": "image"
 }

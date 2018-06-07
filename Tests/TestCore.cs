@@ -12,8 +12,8 @@ namespace Tests
     public class TestService
     {
         ITestOutputHelper output;
-        Config config;
-        String testFolder;
+        readonly Config config;
+        readonly String testFolder;
         public TestService(ITestOutputHelper output)
         {
             config = Config.GetConfig(@"C:\Users\t-chwang\source\repos\ImageServingPlatform\Core\config.json");
