@@ -66,9 +66,6 @@ namespace Core
         }
         public static void Main(String[] args)
         {
-            // TestDatabase();
-            // TestImageRead2();
-            // TestGetConfig();
             TestUploadBlob();
             Console.ReadKey();
         }
