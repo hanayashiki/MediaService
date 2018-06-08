@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Core.MediaProcessors
 {
     interface IMediaProcessor<T>
     {
-        void LoadInfoFromStream(Stream stream, ref T media);
+        Task<T> LoadInfoFromStreamAsync(Stream stream, T image);
         long GetHash(Stream fs);
 
     }

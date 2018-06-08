@@ -8,11 +8,17 @@ using SixLabors;
 using SI = SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace Core.MediaProcessors
 {
     class ImageProcessor : IMediaProcessor<Image>
     {
+        public async Task<Image> LoadInfoFromStreamAsync(Stream stream, Image image)
+        {
+            await Task.Run(() => LoadInfoFromStream(stream, ref image));
+            return image;
+        }
         public void LoadInfoFromStream(Stream stream, ref Image image)
         {
             SI.Formats.IImageFormat format;

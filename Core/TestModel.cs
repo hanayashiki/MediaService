@@ -7,6 +7,7 @@ using System.IO;
 using Core.Storage;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Core.DBManager;
 
 namespace Core
 {
@@ -60,13 +61,31 @@ namespace Core
             BlobStorage blobStorage = new BlobStorage(config);
             FileStream fs = new FileStream("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/Resource/testpic/github-octocat.png", FileMode.Open);
 
-            Task<Uri> t = blobStorage.UploadBlob(fs);
+            Task<Uri> t = blobStorage.UploadAsync(fs);
             t.Wait();
             Console.WriteLine(t.Result);
         }
+        static async void TestUploadBinaryAsync()
+        {
+            Config config = Config.GetConfig("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/config.json");
+            BlobStorage blobStorage = new BlobStorage(config);
+            ImageProcessor imageProcessor = new ImageProcessor();
+            ImageDBManager imageDBManager = new ImageDBManager(new MediaRecordDatabaseContext());
+
+            ImageService imageService = new ImageService(config, imageProcessor, blobStorage, imageDBManager);
+
+            FileStream fs = new FileStream("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/Resource/testpic/github-octocat.png", FileMode.Open);
+            byte[] fileContent = new BinaryReader(fs).ReadBytes((int)fs.Length);
+            Console.WriteLine(fileContent.Length);
+            fs.Close();
+
+            await imageService.UploadBinaryAsync(fileContent);
+            Console.WriteLine("End of TestUploadBinaryAsync. ");
+        }
         public static void Main(String[] args)
         {
-            TestUploadBlob();
+            // TestUploadBlob();
+            TestUploadBinaryAsync();
             Console.ReadKey();
         }
     }

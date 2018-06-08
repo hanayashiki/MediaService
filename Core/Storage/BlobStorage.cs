@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Storage
 {
-    class BlobStorage : Storage
+    class BlobStorage : IStorage
     {
         private readonly Config config;
         private readonly CloudStorageAccount storageAccount = null;
@@ -22,8 +22,10 @@ namespace Core.Storage
             cloudBlobClient = storageAccount.CreateCloudBlobClient();
         }
 
-        public async Task<Uri> UploadBlob(Stream stream)
+        private async Task<Uri> UploadBlobAsync(Stream stream)
         {
+            //TODO: correct Uri
+
             CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(config.ContainerName);
             await cloudBlobContainer.CreateIfNotExistsAsync();
 
@@ -34,5 +36,9 @@ namespace Core.Storage
             return cloudBlockBlob.Uri;
         }
 
+        public async Task<Uri> UploadAsync(Stream stream)
+        {
+            return await UploadBlobAsync(stream);
+        }
     }
 }

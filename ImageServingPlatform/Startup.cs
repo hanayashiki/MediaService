@@ -11,18 +11,28 @@ using Microsoft.Extensions.Options;
 
 namespace ImageServingPlatform
 {
+    public class Fuck
+    {
+        public string shit = "xxxx";
+    }
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder();
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<Fuck>(Configuration);
+
             services.AddMvc();
         }
 
