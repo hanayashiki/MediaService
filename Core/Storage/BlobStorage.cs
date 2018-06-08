@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Storage
 {
-    class BlobStorage : IStorage
+    public class BlobStorage : IStorage
     {
         private readonly Config config;
         private readonly CloudStorageAccount storageAccount = null;

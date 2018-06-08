@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Core.DBManager
 {
-    interface IDBManager<MediaType>
+    public interface IDBManager<MediaType>
     {
         void Create(MediaType media);
         void UpdateById(int id, MediaType media);

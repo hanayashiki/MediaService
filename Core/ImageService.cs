@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    class ImageService: IMediaService
+    public class ImageService: IImageService
     {
         readonly Config config;
         readonly IMediaProcessor<Image> imageProcessor;

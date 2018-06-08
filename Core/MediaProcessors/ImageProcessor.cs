@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Core.MediaProcessors
 {
-    class ImageProcessor : IMediaProcessor<Image>
+    public class ImageProcessor : IMediaProcessor<Image>
     {
         public async Task<Image> LoadInfoFromStreamAsync(Stream stream, Image image)
         {

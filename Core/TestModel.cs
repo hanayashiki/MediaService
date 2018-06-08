@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Core.Models;
+﻿using Core.DBManager;
 using Core.MediaProcessors;
-using System.IO;
+using Core.Models;
 using Core.Storage;
+using System;
+using System.IO;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Core.DBManager;
 
 namespace Core
 {

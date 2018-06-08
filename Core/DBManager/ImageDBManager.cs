@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Core.DBManager
 {
-    class ImageDBManager : IDBManager<Image>
+    public class ImageDBManager : IDBManager<Image>
     {
         MediaRecordDatabaseContext context;
         public ImageDBManager(MediaRecordDatabaseContext context)

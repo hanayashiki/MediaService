@@ -7,20 +7,22 @@ using Microsoft.AspNetCore.Mvc;
 using Core;
 using Microsoft.Extensions.Options;
 
-namespace ImageServingPlatform.Controllers
+namespace MediaServicePlatform.Controllers
 {
     [Route("[controller]/[action]")]
     public class ImageController : Controller
     {
-        string greeting;
-        public ImageController(IOptions<Fuck> fuck)
+        readonly MediaServiceConfiguration config = null;
+        readonly IImageService imageService = null;
+        public ImageController(IOptions<MediaServiceConfiguration> config)
         {
-            greeting = fuck.Value.shit;
+            this.config = config.Value;
+            this.imageService = this.config.ImageService;
         }
         [HttpPost]
         public ActionResult<String> Upload()
         {
-            return Ok(new { fuck = greeting, shit = 2});
+            return Ok();
         }
     }
 }

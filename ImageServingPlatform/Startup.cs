@@ -9,12 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace ImageServingPlatform
+namespace MediaServicePlatform
 {
-    public class Fuck
-    {
-        public string shit = "xxxx";
-    }
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -26,12 +22,11 @@ namespace ImageServingPlatform
 
         public IConfiguration Configuration { get; }
 
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.Configure<Fuck>(Configuration);
+            services.Configure<MediaServiceConfiguration>(Configuration);
 
             services.AddMvc();
         }

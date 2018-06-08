@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public interface IMediaService
+    public interface IImageService
     {
         //Task<UploadResult> UploadBinaryAsync(MemoryStream source);
         Task<UploadResult> UploadBinaryAsync(byte[] source);

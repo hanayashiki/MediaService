@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Storage
 {
-    interface IStorage
+    public interface IStorage
     {
         Task<Uri> UploadAsync(Stream stream);
     }

@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageServingPlatform
+namespace MediaServicePlatform.ServiceFactory
 {
-    public class MediaRecord
+    public class ServiceFactory
     {
-        public int ID { get; set; }
-
     }
 }
