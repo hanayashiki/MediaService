@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Core.Storage
@@ -22,23 +23,36 @@ namespace Core.Storage
             cloudBlobClient = storageAccount.CreateCloudBlobClient();
         }
 
-        private async Task<Uri> UploadBlobAsync(Stream stream)
+        private async Task<CloudBlockBlob> GetCloudBlockBlock(string blobName)
         {
-            //TODO: correct Uri
-
             CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(config.ContainerName);
             await cloudBlobContainer.CreateIfNotExistsAsync();
 
-            string blobName = config.ContainerName + "_" + Guid.NewGuid().ToString();
             CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(blobName);
+            return cloudBlockBlob;
+        }
+
+        private async Task<Uri> UploadBlobAsync(Stream stream, string blobName)
+        {
+            // TODO: Implement cancel
+            CloudBlockBlob cloudBlockBlob = await GetCloudBlockBlock(blobName);
             await cloudBlockBlob.UploadFromStreamAsync(stream);
 
             return cloudBlockBlob.Uri;
         }
 
-        public async Task<Uri> UploadAsync(Stream stream)
+        public async Task<Uri> UploadAsync(Stream stream, string blobName)
         {
-            return await UploadBlobAsync(stream);
+            return await UploadBlobAsync(stream, blobName);
+        }
+
+        public async Task<byte[]> DownloadAsync(string blobName)
+        {
+            // TODO: Maybe implement cache
+            CloudBlockBlob cloudBlockBlob = await GetCloudBlockBlock(blobName);
+            MemoryStream stream = new MemoryStream();
+            await cloudBlockBlob.DownloadToStreamAsync(stream);
+            return stream.GetBuffer();
         }
     }
 }

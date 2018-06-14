@@ -2,7 +2,7 @@
 
 namespace Core.Migrations
 {
-    public partial class InitImage : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,10 +12,10 @@ namespace Core.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Url = table.Column<string>(maxLength: 500, nullable: true),
                     Width = table.Column<int>(nullable: false),
                     Height = table.Column<int>(nullable: false),
-                    MD5 = table.Column<long>(nullable: false)
+                    MD5 = table.Column<long>(nullable: false),
+                    BlobName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

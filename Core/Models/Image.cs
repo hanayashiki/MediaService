@@ -20,13 +20,13 @@ namespace Core.Models
     {
         [Key]
         public int Id { get; set; }
-        [MaxLength(500)]
-        public string Url { get; set; }
         [Required]
         public int Width { get; set; }
         [Required]
         public int Height { get; set; }
         [Required]
         public long MD5 { get; set; }
+        [Required]
+        public string BlobName { get; set; }
     }
 }

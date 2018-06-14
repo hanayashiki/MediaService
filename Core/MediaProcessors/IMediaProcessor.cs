@@ -10,6 +10,5 @@ namespace Core.MediaProcessors
     {
         Task<T> LoadInfoFromStreamAsync(Stream stream, T image);
         long GetHash(Stream fs);
-
     }
 }

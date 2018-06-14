@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 using Core;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using MediaServicePlatform.Utils;
 
 namespace MediaServicePlatform.Controllers
 {
@@ -20,9 +23,72 @@ namespace MediaServicePlatform.Controllers
             this.imageService = this.config.ImageService;
         }
         [HttpPost]
-        public ActionResult<String> Upload()
+        public async Task<ActionResult<string>> Upload(IFormFile file)
         {
-            return Ok();
+            if (file == null) {
+                return BadRequest("Invalid file format");
+            }
+            long size = file.Length;
+            byte[] fileBuffer = new byte[size];
+            MemoryStream fileStream = new MemoryStream(fileBuffer);
+            await file.CopyToAsync(fileStream);
+            UploadResult uploadResult = await imageService.UploadBinaryAsync(fileBuffer, file.FileName);
+            if (uploadResult.Status == "ok" || uploadResult.Status == "duplicate")
+            {
+                return Url.Action(action: "Download", controller: "Image", values: new { id = uploadResult.Id },
+                    protocol: this.config.WebConfig.Protocol, host: HttpContext.Request.Host.ToString());
+            } else
+            {
+                return BadRequest(uploadResult.Status);
+            }
+
         }
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult> Download(int id)
+        {
+            DownloadResult downloadResult = await imageService.DownloadBinaryAsync(id);
+            if (downloadResult.Status == "not found")
+            {
+                return NotFound();
+            }
+            if (downloadResult.Status == "ok")
+            {
+                string mimeType = MimeMapping.MimeUtility.GetMimeMapping(downloadResult.BlobName);
+                return File(downloadResult.FileBytes, mimeType, GetFileName(id, downloadResult.BlobName));
+            } else
+            {
+                return BadRequest(downloadResult.Status);
+            }
+        }
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult> Download(int id, [RequiredFromQuery] int xmin, [RequiredFromQuery] int xmax,
+            [RequiredFromQuery] int ymin, [RequiredFromQuery] int ymax)
+        {
+            DownloadResult downloadResult = await imageService.DownloadAndCropBinaryAsync(id, xmin, xmax, ymin, ymax);
+            if (downloadResult.Status == "not found")
+            {
+                return NotFound();
+            }
+            if (downloadResult.Status == "ok")
+            {
+                string mimeType = MimeMapping.MimeUtility.GetMimeMapping(downloadResult.BlobName);
+                return File(downloadResult.FileBytes, mimeType, GetFileName(id, downloadResult.BlobName));
+            }
+            else
+            {
+                return BadRequest(downloadResult.Status);
+            }
+        }
+        [NonAction]
+        private string GetFileName(int id, string blobName)
+        {
+            return "image_" + id + Path.GetExtension(blobName);
+        }
+
+        
     }
+
+
 }

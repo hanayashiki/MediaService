@@ -20,12 +20,12 @@ namespace Core.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("BlobName")
+                        .IsRequired();
+
                     b.Property<int>("Height");
 
                     b.Property<long>("MD5");
-
-                    b.Property<string>("Url")
-                        .HasMaxLength(500);
 
                     b.Property<int>("Width");
 

@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>MediaServicePlatform</AssemblyName>
+    <RootNamespace>MediaServicePlatform</RootNamespace>
+    <ApplicationInsightsResourceId>/subscriptions/a7877720-a299-46cc-acae-02e1d9fd4d9a/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/MediaServicePlatform</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/a7877720-a299-46cc-acae-02e1d9fd4d9a/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/MediaServicePlatform</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
@@ -21,6 +25,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,10 @@
 ﻿using Core.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Core.DBManager
 {
@@ -13,9 +15,10 @@ namespace Core.DBManager
         {
             this.context = context;
         }
-        public void Create(Image image)
+        public Image Create(Image image)
         {
-            context.Image.Add(image);
+            EntityEntry<Image> entityEntry = context.Image.Add(image);
+            return entityEntry.Entity;
         }
         public void UpdateById(int id, Image image)
         {
@@ -29,9 +32,29 @@ namespace Core.DBManager
         {
             return context.Image.Any(m => m.MD5 == media.MD5);
         }
+        public int? GetIdByMD5(long MD5)
+        {
+            IEnumerable<int> idQuery =
+                from image in context.Image
+                where image.MD5 == MD5
+                select image.Id;
+            foreach (int id in idQuery)
+            {
+                return id;
+            }
+            return null;
+        }
         public void SaveChanges()
         {
             context.SaveChanges();
+        }
+        public Image GetRecordById(int id)
+        {
+            return context.Find<Image>(id);
+        }
+        public Task<Image> GetRecordByIdAsync(int id)
+        {
+            return context.FindAsync<Image>(id);
         }
     }
 }

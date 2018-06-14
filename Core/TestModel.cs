@@ -14,7 +14,6 @@ namespace Core
         {
             var db = new MediaRecordDatabaseContext();
             db.Image.Add(new Image {
-                Url = "https://avatars2.githubusercontent.com/u/26056783?s=460&v=4",
                 Width = 243,
                 Height = 243,
                 MD5 = 233333333
@@ -24,7 +23,7 @@ namespace Core
 
             foreach (var image in db.Image)
             {
-                Console.WriteLine(" - {0} {1}", image.Id, image.Url);
+                Console.WriteLine(" - {0}", image.Id);
             }
 
         }
@@ -58,7 +57,7 @@ namespace Core
             BlobStorage blobStorage = new BlobStorage(config);
             FileStream fs = new FileStream("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/Resource/testpic/github-octocat.png", FileMode.Open);
 
-            Task<Uri> t = blobStorage.UploadAsync(fs);
+            Task<Uri> t = blobStorage.UploadAsync(fs, "abc.png");
             t.Wait();
             Console.WriteLine(t.Result);
         }
@@ -76,7 +75,7 @@ namespace Core
             Console.WriteLine(fileContent.Length);
             fs.Close();
 
-            await imageService.UploadBinaryAsync(fileContent);
+            await imageService.UploadBinaryAsync(fileContent, "abc.png");
             Console.WriteLine("End of TestUploadBinaryAsync. ");
         }
         public static void Main(String[] args)

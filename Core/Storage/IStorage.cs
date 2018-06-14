@@ -8,6 +8,7 @@ namespace Core.Storage
 {
     public interface IStorage
     {
-        Task<Uri> UploadAsync(Stream stream);
+        Task<Uri> UploadAsync(Stream stream, string blobName);
+        Task<byte[]> DownloadAsync(string blobName);
     }
 }

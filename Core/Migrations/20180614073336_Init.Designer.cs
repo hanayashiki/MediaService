@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(MediaRecordDatabaseContext))]
-    [Migration("20180607034457_InitImage")]
-    partial class InitImage
+    [Migration("20180614073336_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,12 +22,12 @@ namespace Core.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("BlobName")
+                        .IsRequired();
+
                     b.Property<int>("Height");
 
                     b.Property<long>("MD5");
-
-                    b.Property<string>("Url")
-                        .HasMaxLength(500);
 
                     b.Property<int>("Width");
 
