@@ -32,13 +32,13 @@ namespace Core.DBManager
         {
             return context.Image.Any(m => m.MD5 == media.MD5);
         }
-        public int? GetIdByMD5(long MD5)
+        public String GetIdByMD5(long MD5)
         {
-            IEnumerable<int> idQuery =
+            IEnumerable<string> idQuery =
                 from image in context.Image
                 where image.MD5 == MD5
                 select image.Id;
-            foreach (int id in idQuery)
+            foreach (string id in idQuery)
             {
                 return id;
             }
@@ -48,11 +48,11 @@ namespace Core.DBManager
         {
             context.SaveChanges();
         }
-        public Image GetRecordById(int id)
+        public Image GetRecordById(string id)
         {
             return context.Find<Image>(id);
         }
-        public Task<Image> GetRecordByIdAsync(int id)
+        public Task<Image> GetRecordByIdAsync(string id)
         {
             return context.FindAsync<Image>(id);
         }

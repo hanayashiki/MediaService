@@ -4,22 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace Core.Models
 {
-    public class MediaRecordDatabaseContext : DbContext
-    {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // optionsBuilder.UseSqlite("Data Source=../../../../Core/media_record.db");
-            optionsBuilder.UseSqlite("Data Source=C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/media_record.db");
-        }
-        public DbSet<Image> Image { get; set; }
-    }
     public class Image
     {
+        //[BsonId(IdGenerator = typeof(NullIdChecker))]
+        [BsonRepresentation(BsonType.ObjectId)]
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required]
         public int Width { get; set; }
         [Required]

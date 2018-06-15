@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\ImageServingPlatform\MediaServicePlatform.csproj" />
+    <ProjectReference Include="..\MediaServicePlatform\MediaServicePlatform.csproj" />
   </ItemGroup>
 
 </Project>

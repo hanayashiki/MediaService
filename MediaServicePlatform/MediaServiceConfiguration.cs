@@ -18,7 +18,7 @@ namespace MediaServicePlatform
         public MediaServiceConfiguration()
         {
             CoreConfig = Config.GetConfig("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/config.json");
-            WebConfig = WebConfig.GetWebConfig("C:/Users/t-chwang/source/repos/ImageServingPlatform/ImageServingPlatform/webconfig.json");
+            WebConfig = WebConfig.GetWebConfig("C:/Users/t-chwang/source/repos/ImageServingPlatform/MediaServicePlatform/webconfig.json");
             ImageService = ImageServiceFactory.GetImageService(CoreConfig);
         }
     }

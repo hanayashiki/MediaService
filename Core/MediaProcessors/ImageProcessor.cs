@@ -3,6 +3,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Transforms;
 using SixLabors.Primitives;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -47,7 +48,12 @@ namespace Core.MediaProcessors
         public byte[] CropImageToByte(Stream stream, int xmin, int xmax, int ymin, int ymax)
         {
             SI.Image<Rgba32> sImage = SI.Image.Load(stream, out SI.Formats.IImageFormat format);
-            sImage.Mutate(m => m.Crop(new Rectangle(xmin, ymin, xmax - xmin, ymax - ymin)));
+            try
+            {
+                sImage.Mutate(m => m.Crop(new Rectangle(xmin, ymin, xmax - xmin, ymax - ymin)));
+            } catch (ImageProcessingException) {
+                throw new ArgumentOutOfRangeException();
+            }
             System.Console.WriteLine(sImage.Width);
             System.Console.WriteLine(sImage.Height);
             MemoryStream memoryStream = new MemoryStream();

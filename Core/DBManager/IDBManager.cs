@@ -10,12 +10,12 @@ namespace Core.DBManager
     public interface IDBManager<MediaType>
     {
         MediaType Create(MediaType media);
-        MediaType GetRecordById(int id);
-        Task<MediaType> GetRecordByIdAsync(int id);
+        MediaType GetRecordById(string id);
+        Task<MediaType> GetRecordByIdAsync(string id);
         void UpdateById(int id, MediaType media);
         void DeleteById(int id);
         bool CheckDuplicate(MediaType media);
-        int? GetIdByMD5(long MD5);
+        String GetIdByMD5(long MD5);
         void SaveChanges();
     }
 }

@@ -64,37 +64,54 @@ namespace Core
                 dbManager.SaveChanges();
             } else
             {
-                image.Id = (int)id;
+                image.Id = id;
                 status = "duplicate";
             }
 
             Console.WriteLine("End.");
             return new UploadResult { Status = status, Id = image.Id, UploadType = "image" };
         }
-        public async Task<DownloadResult> DownloadBinaryAsync(int id)
+        public async Task<DownloadResult> DownloadBinaryAsync(string id)
         {
             (byte[] fileBytes, Image image) = await GetBlobAsync(id);
+            // Console.WriteLine(fileBytes.Length);
             if (fileBytes == null)
             {
-                new DownloadResult { Status = "not found", FileBytes = null };
+                return new DownloadResult { Status = "not found", FileBytes = null };
             }
             // TODO: exception here
             return new DownloadResult { Status = "ok", BlobName = image.BlobName, FileBytes = fileBytes };
         }
 
-        public async Task<DownloadResult> DownloadAndCropBinaryAsync(int id, int xmin, int xmax, int ymin, int ymax)
+        public async Task<DownloadResult> DownloadAndCropBinaryAsync(string id, int xmin, int xmax, int ymin, int ymax)
         {
             (byte[] fileBytes, Image image) = await GetBlobAsync(id);
             if (fileBytes == null)
             {
-                new DownloadResult { Status = "not found", FileBytes = null };
+                return new DownloadResult { Status = "not found", FileBytes = null };
             }
-            byte[] cropped = imageProcessor.CropImageToByte(new MemoryStream(fileBytes),
-                                                                xmin: xmin, xmax: xmax, ymin: ymin, ymax: ymax);
-            return new DownloadResult { Status = "ok", BlobName = image.BlobName, FileBytes = cropped };
+            try
+            {
+                byte[] cropped = imageProcessor.CropImageToByte(new MemoryStream(fileBytes),
+                                                                    xmin: xmin, xmax: xmax, ymin: ymin, ymax: ymax);
+                return new DownloadResult { Status = "ok", BlobName = image.BlobName, FileBytes = cropped };
+            } catch (ArgumentOutOfRangeException)
+            {
+                return new DownloadResult { Status = "invalid arguments", BlobName = image.BlobName, FileBytes = null };
+            }
         }
 
-        private async Task<(byte[], Image)> GetBlobAsync(int id)
+        public async Task<InfoResult> GetInfoAsync(string id)
+        {
+            Image image = await dbManager.GetRecordByIdAsync(id);
+            if (image == null)
+            {
+                return new InfoResult { Status = "not found" };
+            }
+            return new InfoResult(image) { Status = "ok"};
+        }
+
+        private async Task<(byte[], Image)> GetBlobAsync(string id)
         {
             Image image = await dbManager.GetRecordByIdAsync(id);
             if (image == null)
@@ -104,5 +121,6 @@ namespace Core
             byte[] fileBytes = await storage.DownloadAsync(image.BlobName);
             return (fileBytes, image);
         }
+
     }
 }

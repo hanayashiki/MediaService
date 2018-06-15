@@ -45,7 +45,7 @@ namespace MediaServicePlatform.Controllers
         }
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult> Download(int id)
+        public async Task<ActionResult> Download(string id)
         {
             DownloadResult downloadResult = await imageService.DownloadBinaryAsync(id);
             if (downloadResult.Status == "not found")
@@ -63,7 +63,7 @@ namespace MediaServicePlatform.Controllers
         }
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult> Download(int id, [RequiredFromQuery] int xmin, [RequiredFromQuery] int xmax,
+        public async Task<ActionResult> Download(string id, [RequiredFromQuery] int xmin, [RequiredFromQuery] int xmax,
             [RequiredFromQuery] int ymin, [RequiredFromQuery] int ymax)
         {
             DownloadResult downloadResult = await imageService.DownloadAndCropBinaryAsync(id, xmin, xmax, ymin, ymax);
@@ -81,8 +81,25 @@ namespace MediaServicePlatform.Controllers
                 return BadRequest(downloadResult.Status);
             }
         }
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult> Info(string id)
+        {
+            InfoResult infoResult = await imageService.GetInfoAsync(id);
+            if (infoResult.Status == "not found")
+            {
+                return NotFound();
+            }
+            if (infoResult.Status == "ok")
+            {
+                return Json(infoResult.ImageInfo);
+            } else
+            {
+                return BadRequest(infoResult.Status);
+            }
+        }
         [NonAction]
-        private string GetFileName(int id, string blobName)
+        private string GetFileName(string id, string blobName)
         {
             return "image_" + id + Path.GetExtension(blobName);
         }

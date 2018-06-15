@@ -8,9 +8,10 @@ namespace Core
     {
         //Task<UploadResult> UploadBinaryAsync(MemoryStream source);
         Task<UploadResult> UploadBinaryAsync(byte[] source, string fileName);
-        Task<DownloadResult> DownloadBinaryAsync(int id);
+        Task<DownloadResult> DownloadBinaryAsync(string id);
 
-        Task<DownloadResult> DownloadAndCropBinaryAsync(int id, int xmin, int xmax, int ymin, int ymax);
+        Task<DownloadResult> DownloadAndCropBinaryAsync(string id, int xmin, int xmax, int ymin, int ymax);
+        Task<InfoResult> GetInfoAsync(string id);
     }
 
 }
