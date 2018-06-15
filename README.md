@@ -9,7 +9,7 @@ REST API 设计
 2.  `GET /image/Download/{id}`
   + 输入：`{id}` 是 `POST /image/Upload` 返回的 id 部分。        
   + 返回：图片文件。如果 id 不存在，返回 `404 Not Found`。
-3.  `GET /image/Download/{id}??xmin={xmin}&xmax={xmax}&ymin={ymin}&ymax={ymax}`
+3.  `GET /image/Download/{id}?xmin={xmin}&xmax={xmax}&ymin={ymin}&ymax={ymax}`
   + 输入：`{id}` 是 `POST /image/Upload` 返回的 id 部分，(`{xmin}`, `{xmax}`, `{ymin}`, `{ymax}`) 为需要截取的矩形区域范围。
   + 返回：经过裁剪的图片文件，此法不会改变服务器存储图片的内容。如果 xmin >= xmax 或者 ymin >= ymax 以及其它不合法的情况，返回 `invalid arguments` 
 4.  `GET /image/Info/{id}`
