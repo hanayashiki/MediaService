@@ -25,6 +25,6 @@ REST API 设计
     "blobName": "A0DCA0E62FB6D1D2.png"
   }
   ```
-  `id` 为图片 id， `width` 为图片宽度，`height` 为图片的高度，`MD5` 为图片文件的 MD5 的低 64 位 16 进制值，`blobName` 是 Azure Blob 的 blob 名称。
+  `id` 为图片 id， `width` 为图片宽度，`height` 为图片的高度，`MD5` 为图片文件的 MD5 的低 64 位 16 进制值，`blobName` 是 Azure Blob 的 blob 名称。        
   如果 `id` 不存在，返回 `404 Not Found`。
   
