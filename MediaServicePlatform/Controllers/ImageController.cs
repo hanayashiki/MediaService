@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using MediaServicePlatform.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace MediaServicePlatform.Controllers
 {
@@ -17,15 +18,19 @@ namespace MediaServicePlatform.Controllers
     {
         readonly MediaServiceConfiguration config = null;
         readonly IImageService imageService = null;
-        public ImageController(IOptions<MediaServiceConfiguration> config)
+        readonly ILogger logger;
+        public ImageController(IOptions<MediaServiceConfiguration> config, ILogger<ImageController> logger)
         {
             this.config = config.Value;
             this.imageService = this.config.ImageService;
+            this.imageService.UseLogger(logger);
+            this.logger = logger;
         }
         [HttpPost]
         public async Task<ActionResult<string>> Upload(IFormFile file)
         {
             if (file == null) {
+                logger.LogWarning("did not get post request with a file.");
                 return BadRequest("Invalid file format");
             }
             long size = file.Length;
@@ -35,10 +40,12 @@ namespace MediaServicePlatform.Controllers
             UploadResult uploadResult = await imageService.UploadBinaryAsync(fileBuffer, file.FileName);
             if (uploadResult.Status == "ok" || uploadResult.Status == "duplicate")
             {
+                logger.LogInformation($"new file: id={uploadResult.Id}, duplicate:{(uploadResult.Status=="duplicate")}");
                 return Url.Action(action: "Download", controller: "Image", values: new { id = uploadResult.Id },
                     protocol: this.config.WebConfig.Protocol, host: HttpContext.Request.Host.ToString());
             } else
             {
+                logger.LogWarning($"errorneous upload: {uploadResult.Status}");
                 return BadRequest(uploadResult.Status);
             }
 
@@ -50,11 +57,13 @@ namespace MediaServicePlatform.Controllers
             DownloadResult downloadResult = await imageService.DownloadBinaryAsync(id);
             if (downloadResult.Status == "not found")
             {
+                logger.LogWarning($"id={id} not found");
                 return NotFound();
             }
             if (downloadResult.Status == "ok")
             {
                 string mimeType = MimeMapping.MimeUtility.GetMimeMapping(downloadResult.BlobName);
+                logger.LogInformation($"downloaded id={id}, blobName={downloadResult.BlobName}");
                 return File(downloadResult.FileBytes, mimeType, GetFileName(id, downloadResult.BlobName));
             } else
             {
@@ -69,11 +78,13 @@ namespace MediaServicePlatform.Controllers
             DownloadResult downloadResult = await imageService.DownloadAndCropBinaryAsync(id, xmin, xmax, ymin, ymax);
             if (downloadResult.Status == "not found")
             {
+                logger.LogWarning($"id={id} not found");
                 return NotFound();
             }
             if (downloadResult.Status == "ok")
             {
                 string mimeType = MimeMapping.MimeUtility.GetMimeMapping(downloadResult.BlobName);
+                logger.LogInformation($"downloaded id={id}, blobName={downloadResult.BlobName}, cropping=({xmin}, {xmax}, {ymin}, {ymax})");
                 return File(downloadResult.FileBytes, mimeType, GetFileName(id, downloadResult.BlobName));
             }
             else

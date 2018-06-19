@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -12,6 +14,8 @@ namespace Core
 
         Task<DownloadResult> DownloadAndCropBinaryAsync(string id, int xmin, int xmax, int ymin, int ymax);
         Task<InfoResult> GetInfoAsync(string id);
+
+        void UseLogger(ILogger logger);
     }
 
 }

@@ -9,12 +9,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+using Serilog;
+
 namespace MediaServicePlatform
 {
     public class Startup
     {
         public Startup(IHostingEnvironment env)
         {
+            Log.Logger = new LoggerConfiguration()
+              .Enrich.FromLogContext()
+              .WriteTo.File("./media.log")
+              .CreateLogger();
+
             var builder = new ConfigurationBuilder();
 
             Configuration = builder.Build();
@@ -27,6 +34,8 @@ namespace MediaServicePlatform
         {
             services.AddOptions();
             services.Configure<MediaServiceConfiguration>(Configuration);
+            services.AddLogging(loggingBuilder =>
+                loggingBuilder.AddSerilog(dispose: true));
 
             services.AddMvc();
         }

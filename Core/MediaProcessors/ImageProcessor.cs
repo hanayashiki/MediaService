@@ -21,7 +21,14 @@ namespace Core.MediaProcessors
         public void LoadInfoFromStream(Stream stream, ref Models.Image image)
         {
             SI.Formats.IImageFormat format;
-            SI.Image<Rgba32> sImage = SI.Image.Load(stream, out format);
+            SI.Image<Rgba32> sImage;
+            try
+            {
+                sImage = SI.Image.Load(stream, out format);
+            } catch (ImageFormatException)
+            {
+                throw new NotSupportedException();
+            }
 
             image.Height = sImage.Height;
             image.Width = sImage.Width;
