@@ -8,18 +8,17 @@ using Newtonsoft.Json.Linq;
 
 namespace Core
 {
-    public class Config
+    public class BlobStorageConfig
     {
         public string StorageConnectionStringFile { get; set; }
         public int MaxSegmentSize { get; set; }
         public string StorageConnectionString { get; set; }
-
         public string ContainerName { get; set; }
 
-        public static Config GetConfig(String configJsonFile)
+        public static BlobStorageConfig GetConfig(String configJsonFile)
         {
             String jsonStr = File.ReadAllText(configJsonFile);
-            Config config = JsonConvert.DeserializeObject<Config>(jsonStr);
+            BlobStorageConfig config = JsonConvert.DeserializeObject<BlobStorageConfig>(jsonStr);
             String storageConnectionStringFileStr = File.ReadAllText(config.StorageConnectionStringFile);
             config.StorageConnectionString = 
                 JObject.Parse(storageConnectionStringFileStr)["StorageConnectionString"].ToString();

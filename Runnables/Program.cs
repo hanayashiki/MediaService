@@ -9,7 +9,7 @@ namespace Runnables
 {
     class Program
     {
-        static Config config = Config.GetConfig(@"C:\Users\t-chwang\source\repos\ImageServingPlatform\ImageServingPlatform\Service\service_config.json");
+        static BlobStorageConfig config = BlobStorageConfig.GetConfig(@"C:\Users\t-chwang\source\repos\ImageServingPlatform\ImageServingPlatform\Service\service_config.json");
         static readonly String testFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
         static void DebugFile2Bytes()
         {

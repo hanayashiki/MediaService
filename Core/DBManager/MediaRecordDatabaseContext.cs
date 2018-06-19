@@ -1,8 +1,10 @@
 ﻿using Core.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Core.DBManager
 {
+    [Obsolete]
     public class MediaRecordDatabaseContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

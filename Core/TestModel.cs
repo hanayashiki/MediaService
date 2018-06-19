@@ -47,13 +47,13 @@ namespace Core
         }
         static void TestGetConfig()
         {
-            Config config = Config.GetConfig("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/config.json");
+            BlobStorageConfig config = BlobStorageConfig.GetConfig("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/config.json");
             Console.WriteLine(config.StorageConnectionStringFile);
             Console.WriteLine(config.StorageConnectionString);
         }
         static void TestUploadBlob()
         {
-            Config config = Config.GetConfig("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/config.json");
+            BlobStorageConfig config = BlobStorageConfig.GetConfig("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/config.json");
             BlobStorage blobStorage = new BlobStorage(config);
             FileStream fs = new FileStream("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/Resource/testpic/github-octocat.png", FileMode.Open);
 
@@ -63,7 +63,7 @@ namespace Core
         }
         static async void TestUploadBinaryAsync()
         {
-            Config config = Config.GetConfig("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/config.json");
+            BlobStorageConfig config = BlobStorageConfig.GetConfig("C:/Users/t-chwang/source/repos/ImageServingPlatform/Core/config.json");
             BlobStorage blobStorage = new BlobStorage(config);
             ImageProcessor imageProcessor = new ImageProcessor();
             ImageDBManager imageDBManager = new ImageDBManager(new MediaRecordDatabaseContext());

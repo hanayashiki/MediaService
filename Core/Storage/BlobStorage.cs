@@ -9,11 +9,11 @@ namespace Core.Storage
 {
     public class BlobStorage : IStorage
     {
-        private readonly Config config;
+        private readonly BlobStorageConfig config;
         private readonly CloudStorageAccount storageAccount = null;
         private readonly CloudBlobClient cloudBlobClient = null;
 
-        public BlobStorage(Config config)
+        public BlobStorage(BlobStorageConfig config)
         {
             this.config = config;
             if (!CloudStorageAccount.TryParse(config.StorageConnectionString, out storageAccount))

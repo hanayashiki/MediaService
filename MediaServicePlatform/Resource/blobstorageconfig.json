@@ -1,0 +1,5 @@
+﻿{
+  "StorageConnectionStringFile": ".\\Resource\\storageconnectionstring.private",
+  "MaxSegmentSize": 4194304,
+  "ContainerName": "image"
+}

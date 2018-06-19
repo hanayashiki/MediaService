@@ -166,3 +166,6 @@ $RECYCLE.BIN/
 
 # Private files
 *.private
+
+# Database
+*.db

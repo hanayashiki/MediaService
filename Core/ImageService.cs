@@ -14,7 +14,7 @@ namespace Core
 {
     public class ImageService: IImageService
     {
-        readonly Config config;
+        readonly BlobStorageConfig config;
         readonly ImageProcessor imageProcessor;
         readonly IStorage storage;
         readonly IDBManager<Image> dbManager;
@@ -23,7 +23,7 @@ namespace Core
         private Stopwatch stopwatch = new Stopwatch();
         private Stopwatch stopwatch2 = new Stopwatch();
 
-        public ImageService(Config config, ImageProcessor imageProcessor, 
+        public ImageService(BlobStorageConfig config, ImageProcessor imageProcessor, 
             IStorage storage, IDBManager<Image> dBManager)
         {
             this.config = config;
@@ -44,7 +44,7 @@ namespace Core
 
         public string GetFormatNameWithDot(string fileName)
         {
-            string[] splitted = fileName.Split(".");
+            string[] splitted = fileName.Split('.');
             if (splitted.Length > 1)
             {
                 return "." + splitted[splitted.Length - 1];

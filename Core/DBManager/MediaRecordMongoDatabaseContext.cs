@@ -25,34 +25,15 @@ namespace Core.DBManager
             return config;
         }
     }
-    public class MediaRecordMongoDatabaseContext
+    public class MediaRecordMongoDatabaseContext : MongoDatabaseContext
     {
-        readonly MongoDbConfig config;
-        readonly MongoClient client;
-        readonly IMongoDatabase database;
 
         public IMongoCollection<Image> Image { get; set; }
 
-        public MediaRecordMongoDatabaseContext(MongoDbConfig config)
+        public MediaRecordMongoDatabaseContext(MongoDbConfig config) : base(config)
         {
-            this.config = config;
-            (string username, string password) = GetAuth(config.AuthenticationFile);
-            string mongoDbConnection = string.Format(config.Uri, $"{username}:{password}@", config.DatabaseName);
-            Console.WriteLine("linking to mongodb by: " + mongoDbConnection);
-            this.client = new MongoClient();
-            this.database = client.GetDatabase(config.DatabaseName);
             this.Image = this.database.GetCollection<Image>("Image");
         }
-
-        private (string, string) GetAuth(string authenticationFile)
-        {
-            
-            String jsonStr = File.ReadAllText(authenticationFile);
-            Console.WriteLine(jsonStr);
-            JObject auth = JObject.Parse(jsonStr);
-            return (auth["Username"].Value<string>(), auth["Password"].Value<string>());
-        } 
-
-
+    
     }
 }

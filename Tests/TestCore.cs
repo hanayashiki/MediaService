@@ -12,11 +12,11 @@ namespace Tests
     public class TestService
     {
         ITestOutputHelper output;
-        readonly Config config;
+        readonly BlobStorageConfig config;
         readonly String testFolder;
         public TestService(ITestOutputHelper output)
         {
-            config = Config.GetConfig(@"C:\Users\t-chwang\source\repos\ImageServingPlatform\Core\config.json");
+            config = BlobStorageConfig.GetConfig(@"C:\Users\t-chwang\source\repos\ImageServingPlatform\Core\Storage\blobstorageconfig.json");
             testFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
             this.output = output;
         }

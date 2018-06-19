@@ -12,13 +12,13 @@ namespace MediaServicePlatform.ServiceFactory
 {
     public class ImageServiceFactory : ServiceFactory
     {
-        public static Core.ImageService GetImageService(Core.Config config)
+        public static Core.ImageService GetImageService(Core.BlobStorageConfig config)
         {
             BlobStorage blobStorage = new BlobStorage(config);
             ImageProcessor imageProcessor = new ImageProcessor();
             //ImageDBManager imageDBManager = new ImageDBManager
             //    (new MediaRecordDatabaseContext());
-            MongoDbConfig mongoDbConfig = MongoDbConfig.GetMongoDbConfig(@"C:\Users\t-chwang\source\repos\ImageServingPlatform\Core\DBManager\resource\mongodbconfig.json");
+            MongoDbConfig mongoDbConfig = MongoDbConfig.GetMongoDbConfig(@".\resource\mongodbconfig.json");
             MediaRecordMongoDatabaseContext mongoDbContext = new MediaRecordMongoDatabaseContext(mongoDbConfig);
             ImageMongoDbManager imageDBManager = new ImageMongoDbManager(mongoDbContext);
 
