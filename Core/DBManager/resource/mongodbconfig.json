@@ -1,4 +1,5 @@
 ﻿{
-  "Uri": "mongodb://localhost:27017",
-  "DatabaseName": "MediaRecord"
+  "Uri": "mongodb://{0}localhost:27017/{1}",
+  "DatabaseName": "MediaRecord",
+  "AuthenticationFile": "C:\\Users\\t-chwang\\source\\repos\\ImageServingPlatform\\Core\\DBManager\\resource\\adminauth.private"
 }

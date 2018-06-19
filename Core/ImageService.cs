@@ -30,6 +30,11 @@ namespace Core
             this.imageProcessor = imageProcessor;
             this.storage = storage;
             this.dbManager = dBManager;
+
+            ILoggerFactory loggerFactory = new LoggerFactory()
+              .AddConsole();
+
+            ILogger logger = loggerFactory.CreateLogger<ImageService>();
         }
 
         public void UseLogger(ILogger logger)
