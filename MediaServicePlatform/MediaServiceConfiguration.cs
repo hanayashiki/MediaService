@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using MediaServicePlatform.ServiceFactory;
 using Core;
 using MediaServicePlatform;
+using Core.DBManager;
 
 namespace MediaServicePlatform
 {
+    [Obsolete]
     public class MediaServiceConfiguration
     {
         public Core.BlobStorageConfig CoreConfig { get; set; }
@@ -19,7 +21,8 @@ namespace MediaServicePlatform
         {
             CoreConfig = BlobStorageConfig.GetConfig("./Resource/blobstorageconfig.json");
             WebConfig = WebConfig.GetWebConfig("./webconfig.json");
-            ImageService = ImageServiceFactory.GetImageService(CoreConfig);
+            MongoDbConfig mongoDbConfig = MongoDbConfig.GetMongoDbConfig("./Resource/mongodbconfig.json");
+            ImageService = ImageServiceFactory.GetImageService(CoreConfig, mongoDbConfig);
         }
     }
 }

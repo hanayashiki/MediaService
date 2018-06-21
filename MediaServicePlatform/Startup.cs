@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core;
+using Core.DBManager;
+using Core.Storage;
+using MediaServicePlatform.ServiceFactory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,9 +37,19 @@ namespace MediaServicePlatform
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.Configure<MediaServiceConfiguration>(Configuration);
+            // services.Configure<MediaServiceConfiguration>(Configuration);
             services.AddLogging(loggingBuilder =>
                 loggingBuilder.AddSerilog(dispose: true));
+
+            BlobStorageConfig blobStorageConfig = BlobStorageConfig.GetConfig("./Resource/blobstorageconfig.json");
+            FileStorageConfig fileStorageConfig = FileStorageConfig.GetConfig("./Resource/filestorageconfig.json");
+            MongoDbConfig mongoDbConfig = MongoDbConfig.GetMongoDbConfig("./Resource/mongodbconfig.json");
+            WebConfig webConfig = WebConfig.GetWebConfig("./webconfig.json");
+            services.AddSingleton<IImageService, ImageService>(
+                    s => ImageServiceFactory.GetImageServiceCached(blobStorageConfig, fileStorageConfig, mongoDbConfig)
+                );
+            services.AddSingleton<WebConfig, WebConfig>(c => webConfig);
+
 
             services.AddMvc();
         }

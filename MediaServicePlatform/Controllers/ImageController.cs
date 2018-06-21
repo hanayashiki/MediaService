@@ -16,13 +16,13 @@ namespace MediaServicePlatform.Controllers
     [Route("[controller]/[action]")]
     public class ImageController : Controller
     {
-        readonly MediaServiceConfiguration config = null;
+        readonly WebConfig config;
         readonly IImageService imageService = null;
         readonly ILogger logger;
-        public ImageController(IOptions<MediaServiceConfiguration> config, ILogger<ImageController> logger)
+        public ImageController(IImageService imageService, ILogger<ImageController> logger, WebConfig webConfig)
         {
-            this.config = config.Value;
-            this.imageService = this.config.ImageService;
+            this.config = webConfig;
+            this.imageService = imageService;
             this.imageService.UseLogger(logger);
             this.logger = logger;
         }
@@ -42,7 +42,7 @@ namespace MediaServicePlatform.Controllers
             {
                 logger.LogInformation($"new file: id={uploadResult.Id}, duplicate:{(uploadResult.Status=="duplicate")}");
                 return Url.Action(action: "Download", controller: "Image", values: new { id = uploadResult.Id },
-                    protocol: this.config.WebConfig.Protocol, host: HttpContext.Request.Host.ToString());
+                    protocol: this.config.Protocol, host: HttpContext.Request.Host.ToString());
             } else
             {
                 logger.LogWarning($"errorneous upload: {uploadResult.Status}");

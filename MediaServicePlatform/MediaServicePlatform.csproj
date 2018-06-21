@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -9,10 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Resource\filestorageconfig.json" />
     <Content Remove="Resource\mongodbconfig.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Connected Services\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -32,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Resource\filestorageconfig.json" />
     <None Include="Resource\mongodbconfig.json" />
   </ItemGroup>
 
@@ -39,8 +42,5 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services" />
-  </ItemGroup>
 
 </Project>

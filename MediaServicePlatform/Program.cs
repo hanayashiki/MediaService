@@ -23,6 +23,7 @@ namespace MediaServicePlatform
             WebHost.CreateDefaultBuilder(args)
                 .UseApplicationInsights()
                 .UseStartup<Startup>()
+                .UseKestrel()
                 .Build();
     }
 }

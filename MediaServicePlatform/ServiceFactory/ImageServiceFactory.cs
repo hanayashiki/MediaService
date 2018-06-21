@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Core;
 using Core.DBManager;
 using Core.MediaProcessors;
 using Core.Models;
@@ -12,18 +13,35 @@ namespace MediaServicePlatform.ServiceFactory
 {
     public class ImageServiceFactory : ServiceFactory
     {
-        public static Core.ImageService GetImageService(Core.BlobStorageConfig config)
+        public static ImageService GetImageService(BlobStorageConfig blobStorageConfig, MongoDbConfig mongoDbConfig)
         {
-            BlobStorage blobStorage = new BlobStorage(config);
+            BlobStorage blobStorage = new BlobStorage(blobStorageConfig);
             ImageProcessor imageProcessor = new ImageProcessor();
             //ImageDBManager imageDBManager = new ImageDBManager
             //    (new MediaRecordDatabaseContext());
-            MongoDbConfig mongoDbConfig = MongoDbConfig.GetMongoDbConfig(@".\resource\mongodbconfig.json");
             MediaRecordMongoDatabaseContext mongoDbContext = new MediaRecordMongoDatabaseContext(mongoDbConfig);
             ImageMongoDbManager imageDBManager = new ImageMongoDbManager(mongoDbContext);
 
             Core.ImageService imageService = new Core.ImageService(
-                config, imageProcessor, blobStorage, imageDBManager);
+                blobStorageConfig, imageProcessor, blobStorage, imageDBManager);
+            return imageService;
+        }
+
+        public static ImageService GetImageServiceCached(BlobStorageConfig blobStorageConfig, 
+            FileStorageConfig fileStorageConfig, MongoDbConfig mongoDbConfig)
+        {
+            BlobStorage blobStorage = new BlobStorage(blobStorageConfig);
+            FileStorage fileStorage = new FileStorage(fileStorageConfig);
+            CachedBlogStorage cachedBlogStorage = new CachedBlogStorage(blobStorage, fileStorage);
+            ImageProcessor imageProcessor = new ImageProcessor();
+            //ImageDBManager imageDBManager = new ImageDBManager
+            //    (new MediaRecordDatabaseContext());
+            MediaRecordMongoDatabaseContext mongoDbContext = new MediaRecordMongoDatabaseContext(mongoDbConfig);
+            ImageMongoDbManager imageDBManager = new ImageMongoDbManager(mongoDbContext);
+
+            Core.ImageService imageService = new Core.ImageService(
+                blobStorageConfig, imageProcessor, cachedBlogStorage, imageDBManager
+                );
             return imageService;
         }
     }
