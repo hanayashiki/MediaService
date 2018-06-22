@@ -4,6 +4,7 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Transforms;
 using SixLabors.Primitives;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -20,19 +21,47 @@ namespace Core.MediaProcessors
         }
         public void LoadInfoFromStream(Stream stream, ref Models.Image image)
         {
-            SI.Formats.IImageFormat format;
-            SI.Image<Rgba32> sImage;
+            //SI.Formats.IImageFormat format;
+            //SI.Image<Rgba32> sImage;
+
+            //try
+            //{
+            //    Stopwatch stopWatch = new Stopwatch();
+            //    stopWatch.Start();
+            //    sImage = SI.Image.Load(stream, out format);
+
+
+
+            //    Console.Write($"SI.Image.Load used {stopWatch.Elapsed.Milliseconds}ms.");
+            //} catch (ImageFormatException)
+            //{
+            //    throw new NotSupportedException();
+            //}
+
+            //image.Height = sImage.Height;
+            //image.Width = sImage.Width;
+            //image.MD5 = GetHash(stream);
+
             try
             {
-                sImage = SI.Image.Load(stream, out format);
-            } catch (ImageFormatException)
+                using (System.Drawing.Image tif = System.Drawing.Image.FromStream(stream: stream,
+                                                         useEmbeddedColorManagement: false,
+                                                         validateImageData: false))
+                {
+                    float width = tif.PhysicalDimension.Width;
+                    float height = tif.PhysicalDimension.Height;
+
+                    image.Height = (int)height;
+                    image.Width = (int)width;
+                    image.MD5 = GetHash(stream);
+                    image.Format = GetImageFormatFromStream(stream);
+                    Console.WriteLine("Got image format: " + image.Format);
+                }
+            } catch (ArgumentException)
             {
                 throw new NotSupportedException();
             }
 
-            image.Height = sImage.Height;
-            image.Width = sImage.Width;
-            image.MD5 = GetHash(stream);
         }
         public long GetHash(Stream fs)
         {
@@ -50,6 +79,35 @@ namespace Core.MediaProcessors
                     }
                     return low64;
                 }
+            }
+        }
+
+        private string GetImageFormatFromStream(Stream stream)
+        {
+            stream.Position = 0;
+            byte[] sb = new byte[2];  //这次读取的就是直接0-1的位置长度了.
+            stream.Read(sb, 0, sb.Length);
+            stream.Position = 0;
+            //根据文件头判断
+            string strFlag = sb[0].ToString() + sb[1].ToString();
+            //察看格式类型
+            switch (strFlag)
+            {
+                //JPG格式
+                case "255216":
+                    return ".jpg";
+                //GIF格式
+                case "7173":
+                    return ".gif";
+                //BMP格式
+                case "6677":
+                    return ".bmp";
+                //PNG格式
+                case "13780":
+                    return ".png";
+                //其他格式
+                default:
+                    return "";
             }
         }
         public byte[] CropImageToByte(Stream stream, int xmin, int xmax, int ymin, int ymax)

@@ -169,3 +169,6 @@ $RECYCLE.BIN/
 
 # Database
 *.db
+
+*.diagsession
+TestResults/

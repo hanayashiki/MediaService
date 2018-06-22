@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAzure.Storage;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.IO;
@@ -13,6 +14,7 @@ namespace Core.Storage
         private readonly CloudStorageAccount storageAccount = null;
         private readonly CloudBlobClient cloudBlobClient = null;
 
+        private ILogger logger;
         public BlobStorage(BlobStorageConfig config)
         {
             this.config = config;
@@ -53,6 +55,19 @@ namespace Core.Storage
             MemoryStream stream = new MemoryStream();
             await cloudBlockBlob.DownloadToStreamAsync(stream);
             return stream.GetBuffer();
+        }
+        public bool Exists(string fileName)
+        {
+            throw new NotImplementedException();
+        }
+        public void UseLogger(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
+        public Uri Upload(Stream stream, string fileName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

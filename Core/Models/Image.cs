@@ -24,5 +24,7 @@ namespace Core.Models
         public long MD5 { get; set; }
         [Required]
         public string BlobName { get; set; }
+        [Required]
+        public string Format { get; set; }
     }
 }

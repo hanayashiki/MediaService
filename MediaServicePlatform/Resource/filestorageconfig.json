@@ -1,4 +1,5 @@
 ﻿{
-    "Directory": "C:/testfilestorage/",
-    "MaxSizeMB": 10
+  "Directory": "C:/testfilestorage/",
+  "MaxSizeMB": 10,
+  "LockCount": 1000
 }

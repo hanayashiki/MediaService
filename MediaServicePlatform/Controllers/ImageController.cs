@@ -96,7 +96,7 @@ namespace MediaServicePlatform.Controllers
         [Route("{id}")]
         public async Task<ActionResult> Info(string id)
         {
-            InfoResult infoResult = await imageService.GetInfoAsync(id);
+            InfoResult infoResult = imageService.GetInfo(id);
             if (infoResult.Status == "not found")
             {
                 return NotFound();

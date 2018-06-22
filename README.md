@@ -22,7 +22,8 @@ REST API 设计
     "width": 2902,
     "height": 1888,
     "MD5": "a0dca0e62fb6d1d2",
-    "blobName": "A0DCA0E62FB6D1D2.png"
+    "blobName": "A0DCA0E62FB6D1D2.png",
+    "format": ".png"
   }
   ```
   `id` 为图片 id， `width` 为图片宽度，`height` 为图片的高度，`MD5` 为图片文件的 MD5 的低 64 位 16 进制值，`blobName` 是 Azure Blob 的 blob 名称。        

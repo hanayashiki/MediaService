@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.DBManager
 {
+    [Obsolete]
     public class ImageDBManager : IDBManager<Image>
     {
         MediaRecordDatabaseContext context;

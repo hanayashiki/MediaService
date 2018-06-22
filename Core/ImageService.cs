@@ -20,9 +20,6 @@ namespace Core
         readonly IDBManager<Image> dbManager;
         private ILogger Logger;
 
-        private Stopwatch stopwatch = new Stopwatch();
-        private Stopwatch stopwatch2 = new Stopwatch();
-
         public ImageService(BlobStorageConfig config, ImageProcessor imageProcessor, 
             IStorage storage, IDBManager<Image> dBManager)
         {
@@ -40,6 +37,7 @@ namespace Core
         public void UseLogger(ILogger logger)
         {
             this.Logger = logger;
+            this.storage.UseLogger(logger);
         }
 
         public string GetFormatNameWithDot(string fileName)
@@ -55,32 +53,27 @@ namespace Core
         }
         public async Task<UploadResult> UploadBinaryAsync(byte[] source, string fileName)
         {
-            //Console.WriteLine("try get info stream");
-            //Stream infoSource = new MemoryStream(source.GetBuffer());
-            //Console.WriteLine("try get upload stream");
-            //Stream uploadSource = new MemoryStream(source.GetBuffer());
+            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch stopwatch2 = new Stopwatch();
 
-
-            // Console.WriteLine("try get info stream");
+        // Console.WriteLine("try get info stream");
             Stream infoSource = new MemoryStream(source);
             // Console.WriteLine("try get upload stream");
             Stream uploadSource = new MemoryStream(source);
-            Image media = new Image();
-            Image image;
+            Image image = new Image();
             try
             {
                 stopwatch.Restart();
-                Task<Image> infoTask = imageProcessor.LoadInfoFromStreamAsync(infoSource, media);
-                image = await infoTask;
+                imageProcessor.LoadInfoFromStream(infoSource, ref image);
                 stopwatch.Stop();
-                Logger.LogInformation($"Core.LoadInfoFromStreamAsync used {stopwatch.Elapsed.Milliseconds}ms. ");
+                Logger.LogInformation($"Core.LoadInfoFromStream used {stopwatch.Elapsed.Milliseconds}ms. ");
             } catch (NotSupportedException)
             {
                 return new UploadResult { Status = "invalid file format" };
             }
-            image.BlobName = image.MD5.ToString("X") + GetFormatNameWithDot(fileName);
+            image.BlobName = image.MD5.ToString("X") + image.Format;
             stopwatch2.Start();
-            Task<Uri> uploadTask = storage.UploadAsync(uploadSource, image.BlobName);           
+                  
     
             stopwatch.Restart();
             var id = dbManager.GetIdByMD5(image.MD5);
@@ -94,16 +87,18 @@ namespace Core
             } else
             {
                 image.Id = id;
+                stopwatch.Stop();
+                Logger.LogInformation($"Core.dbManager used {stopwatch.Elapsed.Milliseconds}ms. ");
                 status = "duplicate";
+                return new UploadResult { Status = status, Id = image.Id, UploadType = "image" };
             }
-            stopwatch.Stop();
-            Logger.LogInformation($"Core.dbManager used {stopwatch.Elapsed.Milliseconds}ms. ");
-
+            Task<Uri> uploadTask = storage.UploadAsync(uploadSource, image.BlobName);
             Uri uri = await uploadTask;
             stopwatch2.Stop();
             Logger.LogInformation($"Core.UploadAsync used {stopwatch2.Elapsed.Milliseconds}ms. ");
             return new UploadResult { Status = status, Id = image.Id, UploadType = "image" };
         }
+
         public async Task<DownloadResult> DownloadBinaryAsync(string id)
         {
             (byte[] fileBytes, Image image) = await GetBlobAsync(id);
@@ -118,6 +113,8 @@ namespace Core
 
         public async Task<DownloadResult> DownloadAndCropBinaryAsync(string id, int xmin, int xmax, int ymin, int ymax)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch stopwatch2 = new Stopwatch();
             stopwatch.Restart();
             (byte[] fileBytes, Image image) = await GetBlobAsync(id);
             stopwatch.Stop();
@@ -142,17 +139,27 @@ namespace Core
 
         public async Task<InfoResult> GetInfoAsync(string id)
         {
-            Image image = await dbManager.GetRecordByIdAsync(id);
+            throw new NotImplementedException();
+        }
+
+        public InfoResult GetInfo(string id)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Restart();
+            Image image = dbManager.GetRecordById(id);
+            stopwatch.Stop();
+            Logger.LogInformation($"ImageService::GetInfo: dbManager.GetRecordById used {stopwatch.Elapsed.Milliseconds}ms");
             if (image == null)
             {
                 return new InfoResult { Status = "not found" };
             }
-            return new InfoResult(image) { Status = "ok"};
+            return new InfoResult(image) { Status = "ok" };
         }
 
         private async Task<(byte[], Image)> GetBlobAsync(string id)
         {
-            Image image = await dbManager.GetRecordByIdAsync(id);
+            Image image = dbManager.GetRecordById(id);
+
             if (image == null)
             {
                 return (null, null);

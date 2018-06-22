@@ -14,6 +14,7 @@ namespace Core
 
         Task<DownloadResult> DownloadAndCropBinaryAsync(string id, int xmin, int xmax, int ymin, int ymax);
         Task<InfoResult> GetInfoAsync(string id);
+        InfoResult GetInfo(string id);
 
         void UseLogger(ILogger logger);
     }

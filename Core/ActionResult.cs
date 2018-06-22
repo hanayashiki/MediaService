@@ -50,6 +50,8 @@ namespace Core
         public string MD5 { get; set; }
         [JsonProperty("blobName")]
         public string BlobName { get; set; }
+        [JsonProperty("format")]
+        public string Format { get; set; }
         public ImageInfo(Image image)
         {
             Id = image.Id;
@@ -57,6 +59,7 @@ namespace Core
             Height = image.Height;
             MD5 = image.MD5.ToString("x16");
             BlobName = image.BlobName;
+            Format = image.Format;
         }
     }
 }

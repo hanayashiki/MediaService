@@ -48,7 +48,16 @@ namespace Core.DBManager
 
         public Image GetRecordById(string id)
         {
-            throw new NotImplementedException();
+            var find = context.Image.Find(m => m.Id == id);
+            var sequence = find.ToList();
+            if (sequence.Count() == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return sequence[0];
+            }
         }
 
         public async Task<Image> GetRecordByIdAsync(string id)
