@@ -50,7 +50,6 @@ namespace MediaServicePlatform
                 );
             services.AddSingleton<WebConfig, WebConfig>(c => webConfig);
 
-
             services.AddMvc();
         }
 

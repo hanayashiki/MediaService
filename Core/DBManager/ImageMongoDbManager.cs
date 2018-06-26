@@ -48,29 +48,45 @@ namespace Core.DBManager
 
         public Image GetRecordById(string id)
         {
-            var find = context.Image.Find(m => m.Id == id);
-            var sequence = find.ToList();
-            if (sequence.Count() == 0)
+            IFindFluent<Image, Image> find;
+            try
+            {
+                find = context.Image.Find(m => m.Id == id);
+                var sequence = find.ToList();
+                if (sequence.Count() == 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return sequence[0];
+                }
+            }
+            catch (FormatException e)
             {
                 return null;
-            }
-            else
-            {
-                return sequence[0];
             }
         }
 
         public async Task<Image> GetRecordByIdAsync(string id)
         {
-            var find = await context.Image.FindAsync(m => m.Id == id);
-            var sequence = find.ToList();
-            if (sequence.Count() == 0)
+            IAsyncCursor<Image> find;
+            try
+            {
+                find = await context.Image.FindAsync(m => m.Id == id);
+                var sequence = find.ToList();
+                if (sequence.Count() == 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return sequence[0];
+                }
+            }
+            catch (FormatException e)
             {
                 return null;
-            }
-            else
-            {
-                return sequence[0];
             }
         }
 
